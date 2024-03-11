@@ -1,0 +1,38 @@
+1. Explanation of the Relationship between "Product" and "Product_Category" entities:
+
+The "Product" and "Product_Category" are connected through a one-to-many relationship, meaning each product belongs to just one category, while each category can have multiple products. 
+This connection is made using a foreign key, where the "category_id" in the "Product" table points to the primary key "id" in the "Product_Category" table. 
+This setup simplifies organization, allowing efficient inventory management, reporting, and product searches.
+
+2. Ensuring Each Product Has a Valid Category Assigned:
+
+To ensure data integrity and consistency, each product in the "Product" table must have a valid category assigned to it. 
+This can be achieved by implementing a foreign key constraint on the "category_id" column of the "Product" table, referencing the primary key "id" column of the "Product_Category" table.
+By enforcing this constraint, the database management system ensures that any value entered into the "category_id" column of the "Product" table must exist as a primary key in the "id" column of the "Product_Category" table. 
+Thus, only valid category IDs can be assigned to products, preventing the insertion of erroneous or nonexistent category references.
+
+-- Create the Product_Category table
+CREATE TABLE Product_Category (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP
+);
+
+-- Create the Product table
+CREATE TABLE Product (
+    id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    sku VARCHAR(50),
+    category_id INT,
+    inventory_id INT,
+    price DECIMAL(10, 2),
+    dis_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES Product_Category(id)
+);
